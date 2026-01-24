@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Check, Copy } from 'lucide-react'
 import { Button } from './button'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/github-dark.css'
 
 interface CodeBlockProps {
     children: string
@@ -10,18 +12,26 @@ interface CodeBlockProps {
 
 export function CodeBlock({ children, className, inline }: CodeBlockProps) {
     const [copied, setCopied] = useState(false)
+    const codeRef = useRef<HTMLElement>(null)
 
     // Ensure children is always a string
     const content = String(children || '')
 
     // Extract language from className (format: language-xxx)
-    const language = className?.replace(/language-/, '') || 'text'
+    const language = className?.replace(/language-/, '') || 'plaintext'
 
     const handleCopy = async () => {
         await navigator.clipboard.writeText(content)
         setCopied(true)
         setTimeout(() => setCopied(false), 2000)
     }
+
+    // Apply syntax highlighting when component mounts or content changes
+    useEffect(() => {
+        if (codeRef.current && !inline) {
+            hljs.highlightElement(codeRef.current)
+        }
+    }, [content, inline])
 
     // Inline code (single backtick)
     if (inline) {
@@ -55,8 +65,11 @@ export function CodeBlock({ children, className, inline }: CodeBlockProps) {
             </div>
 
             {/* Code content */}
-            <pre className="overflow-x-auto p-4 m-0 bg-white dark:bg-zinc-950">
-                <code className="font-mono text-[13px] leading-relaxed text-zinc-800 dark:text-zinc-200 block">
+            <pre className="overflow-x-auto p-4 m-0 bg-[#0d1117] dark:bg-[#0d1117]">
+                <code
+                    ref={codeRef}
+                    className={`hljs language-${language} font-mono text-[13px] leading-relaxed block`}
+                >
                     {content}
                 </code>
             </pre>

@@ -95,8 +95,6 @@ export function useChat() {
 
     const setModel = useCallback((model: Model) => {
         if (!currentChatId) {
-            // If no chat, create one? Or just don't do anything? 
-            // Better to handle in UI. But here let's safeguard.
             return;
         }
         setConversations(prev => prev.map(c => {

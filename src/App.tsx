@@ -173,7 +173,7 @@ function App() {
                 </div>
 
                 {/* Input Area */}
-                <div className="flex-shrink-0 bg-white p-4 dark:bg-zinc-900 pb-8">
+                <div className="flex-shrink-0 bg-transparent p-4 pb-8">
                     <div className="mx-auto max-w-3xl">
                         <form
                             onSubmit={handleSubmit}
