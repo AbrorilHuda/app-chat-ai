@@ -52,9 +52,9 @@ export function ChatInput({ onSendMessage, disabled }: ChatInputProps) {
     }, []);
 
     return (
-        <div className="glass-strong border-t border-border p-4 md:p-6">
+        <div className="glass-strong border-t border-border p-3 sm:p-4 md:p-6">
             <form onSubmit={handleSubmit}>
-                <div className="max-w-3xl mx-auto flex gap-3 items-end">
+                <div className="max-w-3xl mx-auto flex gap-2 sm:gap-3 items-end">
                     <div
                         className={cn(
                             "flex-1 rounded-2xl overflow-hidden transition-all duration-200",
@@ -73,7 +73,7 @@ export function ChatInput({ onSendMessage, disabled }: ChatInputProps) {
                             onBlur={() => setIsFocused(false)}
                             placeholder="Message AI..."
                             disabled={disabled}
-                            className="min-h-[24px] max-h-[200px] resize-none border-0 bg-transparent px-4 py-3 text-[15px] leading-6 focus-visible:ring-0 transition-[height] duration-100 ease-out"
+                            className="min-h-[24px] max-h-[200px] resize-none border-0 bg-transparent px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-[15px] leading-6 focus-visible:ring-0 transition-[height] duration-100 ease-out"
                             rows={1}
                         />
                     </div>
@@ -83,23 +83,23 @@ export function ChatInput({ onSendMessage, disabled }: ChatInputProps) {
                         disabled={disabled || !message.trim()}
                         size="icon"
                         className={cn(
-                            "h-[52px] w-[52px] rounded-2xl transition-all duration-200",
+                            "h-11 w-11 sm:h-[52px] sm:w-[52px] rounded-2xl transition-all duration-200 flex-shrink-0",
                             message.trim() && !disabled
-                                ? "bg-gradient-to-r from-primary to-secondary shadow-lg shadow-primary/30 hover:scale-105"
+                                ? "bg-gradient-to-r from-primary to-secondary shadow-lg shadow-primary/30 hover:scale-105 active:scale-95"
                                 : "bg-white/5 opacity-50 scale-95"
                         )}
                     >
                         {disabled ? (
-                            <StopCircle className="h-5 w-5" />
+                            <StopCircle className="h-4 w-4 sm:h-5 sm:w-5" />
                         ) : (
-                            <Send className="h-5 w-5" />
+                            <Send className="h-4 w-4 sm:h-5 sm:w-5" />
                         )}
                     </Button>
                 </div>
             </form>
 
             <div className={cn(
-                "max-w-3xl mx-auto mt-2 text-center text-xs text-muted-foreground transition-opacity duration-200",
+                "max-w-3xl mx-auto mt-2 text-center text-xs text-muted-foreground transition-opacity duration-200 hidden sm:block",
                 isFocused ? "opacity-100" : "opacity-70"
             )}>
                 <kbd className="px-1.5 py-0.5 rounded bg-white/10 font-mono text-[11px]">Enter</kbd> to send, <kbd className="px-1.5 py-0.5 rounded bg-white/10 font-mono text-[11px]">Shift + Enter</kbd> for new line

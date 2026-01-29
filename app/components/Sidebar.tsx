@@ -24,6 +24,7 @@ export function Sidebar({
     onMobileClose,
 }: SidebarProps) {
     const [hoveredId, setHoveredId] = React.useState<string | null>(null);
+    const [deleteConfirmId, setDeleteConfirmId] = React.useState<string | null>(null);
 
     const handleNewChat = () => {
         onNewConversation();
@@ -33,6 +34,20 @@ export function Sidebar({
     const handleSelectConversation = (id: string) => {
         onSelectConversation(id);
         onMobileClose();
+    };
+
+    const handleDeleteClick = (e: React.MouseEvent, id: string) => {
+        e.stopPropagation();
+        setDeleteConfirmId(id);
+    };
+
+    const confirmDelete = (id: string) => {
+        onDeleteConversation(id);
+        setDeleteConfirmId(null);
+    };
+
+    const cancelDelete = () => {
+        setDeleteConfirmId(null);
     };
 
     return (
@@ -97,10 +112,38 @@ export function Sidebar({
                                     onMouseEnter={() => setHoveredId(conversation.id)}
                                     onMouseLeave={() => setHoveredId(null)}
                                 >
+                                    {/* Delete Confirmation Overlay - More visible on mobile */}
+                                    {deleteConfirmId === conversation.id && (
+                                        <div className="absolute inset-0 z-10 bg-black/60 backdrop-blur-md rounded-lg flex flex-col items-center justify-center gap-3 px-4 py-3 border-2 border-destructive/50">
+                                            <p className="text-sm font-semibold text-white text-center">
+                                                Delete conversation?
+                                            </p>
+                                            <div className="flex gap-2 w-full">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() => confirmDelete(conversation.id)}
+                                                    className="flex-1 bg-destructive text-white hover:bg-destructive/90 h-9 font-semibold shadow-lg"
+                                                >
+                                                    <Trash2 className="h-3.5 w-3.5 mr-1.5" />
+                                                    Delete
+                                                </Button>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={cancelDelete}
+                                                    className="flex-1 bg-white/20 hover:bg-white/30 text-white h-9 font-semibold"
+                                                >
+                                                    Cancel
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    )}
+
                                     <button
                                         onClick={() => handleSelectConversation(conversation.id)}
                                         className={cn(
-                                            "w-full text-left px-3 py-2.5 pr-10 rounded-lg transition-all duration-200",
+                                            "w-full text-left px-3 py-2.5 rounded-lg transition-all duration-200",
                                             "flex items-center gap-3",
                                             activeConversationId === conversation.id
                                                 ? "bg-white/10 text-foreground"
@@ -108,26 +151,28 @@ export function Sidebar({
                                         )}
                                     >
                                         <MessageSquare className="h-4 w-4 flex-shrink-0" />
-                                        <span className="flex-1 truncate text-sm">
+                                        <span className="flex-1 truncate text-sm pr-8">
                                             {conversation.title}
                                         </span>
                                     </button>
 
-                                    {/* Delete Button */}
+                                    {/* Delete Button - More visible on mobile */}
                                     <Button
                                         variant="ghost"
                                         size="icon"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            onDeleteConversation(conversation.id);
-                                        }}
+                                        onClick={(e) => handleDeleteClick(e, conversation.id)}
                                         className={cn(
-                                            "absolute right-1.5 top-1/2 -translate-y-1/2 h-7 w-7 transition-opacity duration-200",
-                                            "hover:bg-destructive/20 hover:text-destructive",
-                                            hoveredId === conversation.id ? "opacity-100" : "opacity-0 pointer-events-none"
+                                            "absolute right-1.5 top-1/2 -translate-y-1/2 transition-all duration-200",
+                                            "h-8 w-8 sm:h-7 sm:w-7",
+                                            // Desktop: hover to show
+                                            "md:opacity-0 md:group-hover:opacity-100",
+                                            // Mobile: always visible with red background
+                                            "opacity-100 bg-destructive/20 text-destructive",
+                                            "hover:bg-destructive/30 active:bg-destructive/40",
+                                            "border border-destructive/30"
                                         )}
                                     >
-                                        <Trash2 className="h-3.5 w-3.5" />
+                                        <Trash2 className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
                                     </Button>
                                 </div>
                             ))}
