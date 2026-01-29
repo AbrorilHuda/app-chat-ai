@@ -2,7 +2,7 @@
 
 import { AlertDialog as BaseAlertDialog } from '@base-ui/react/alert-dialog';
 import { buttonVariants } from './button';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/lib/utils';
 
 export function AlertDialog({
   ...props

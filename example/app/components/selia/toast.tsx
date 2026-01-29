@@ -2,7 +2,7 @@
 
 import { Toast as BaseToast, type ToastObject } from '@base-ui/react/toast';
 import { buttonVariants } from './button';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/lib/utils';
 
 export const toastManager = BaseToast.createToastManager();
 export const anchoredToastManager = BaseToast.createToastManager();
@@ -25,7 +25,7 @@ function StackedToasts() {
 
   return (
     <BaseToast.Portal>
-      <BaseToast.Viewport className="fixed top-2 md:top-4 right-0 left-0 mx-2 md:mx-auto flex">
+      <BaseToast.Viewport className="fixed top-2 md:top-4 right-0 left-0 mx-2 md:mx-auto flex z-99">
         {toasts.map((toast) => (
           <BaseToast.Root
             key={toast.id}

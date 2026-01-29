@@ -1,0 +1,155 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: oklch(0.15 0.02 264);
+  --color-foreground: oklch(0.98 0.01 264);
+
+  --color-card: oklch(0.15 0.02 264);
+  --color-card-foreground: oklch(0.98 0.01 264);
+
+  --color-popover: oklch(0.18 0.02 264);
+  --color-popover-foreground: oklch(0.98 0.01 264);
+
+  --color-primary: oklch(0.55 0.25 280);
+  --color-primary-foreground: oklch(0.98 0.01 264);
+
+  --color-secondary: oklch(0.65 0.20 240);
+  --color-secondary-foreground: oklch(0.15 0.02 264);
+
+  --color-muted: oklch(0.25 0.02 264);
+  --color-muted-foreground: oklch(0.65 0.02 264);
+
+  --color-accent: oklch(0.65 0.20 240);
+  --color-accent-foreground: oklch(0.15 0.02 264);
+
+  --color-destructive: oklch(0.45 0.15 20);
+  --color-destructive-foreground: oklch(0.98 0.01 264);
+
+  --color-border: oklch(0.25 0.02 264);
+  --color-input: oklch(0.25 0.02 264);
+  --color-ring: oklch(0.55 0.25 280);
+
+  --radius-lg: 0.75rem;
+  --radius-md: calc(0.75rem - 2px);
+  --radius-sm: calc(0.75rem - 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer utilities {
+
+  /* Custom Scrollbar */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-muted rounded transition-colors;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/30;
+  }
+
+  /* Glassmorphism */
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10;
+  }
+
+  .glass-strong {
+    @apply bg-white/8 backdrop-blur-2xl border border-white/15;
+  }
+
+  /* Gradient Text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
+  }
+}
+
+/* Markdown Content Styling */
+.markdown-content {
+  @apply text-foreground/90 leading-relaxed;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6 {
+  @apply font-semibold text-foreground mt-6 mb-4;
+}
+
+.markdown-content h1 {
+  @apply text-3xl;
+}
+
+.markdown-content h2 {
+  @apply text-2xl;
+}
+
+.markdown-content h3 {
+  @apply text-xl;
+}
+
+.markdown-content p {
+  @apply mb-4;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  @apply ml-6 mb-4;
+}
+
+.markdown-content li {
+  @apply mb-2;
+}
+
+.markdown-content a {
+  @apply text-primary hover:text-primary/80 underline-offset-4 hover:underline transition-colors;
+}
+
+.markdown-content blockquote {
+  @apply border-l-4 border-primary/50 pl-4 my-4 text-muted-foreground italic;
+}
+
+.markdown-content code:not(pre code) {
+  @apply bg-muted px-1.5 py-0.5 rounded text-sm font-mono;
+}
+
+.markdown-content pre {
+  @apply my-4 rounded-lg overflow-hidden;
+}
+
+.markdown-content pre code {
+  @apply block p-4 overflow-x-auto text-sm;
+}
+
+.markdown-content table {
+  @apply w-full border-collapse my-4;
+}
+
+.markdown-content th,
+.markdown-content td {
+  @apply px-4 py-2 border border-border text-left;
+}
+
+.markdown-content th {
+  @apply bg-muted font-semibold;
+}

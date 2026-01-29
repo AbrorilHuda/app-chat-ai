@@ -1,7 +1,6 @@
 import { useRef, useEffect, useState } from 'react'
 import { Send, Trash2, Plus, MessageSquare, Menu, Bot, Sparkles, BrainCircuit, Box, Globe, Paperclip, Cpu, X } from 'lucide-react'
 import { Button } from '@/components/selia/button'
-
 import {
     Select,
     SelectTrigger,
@@ -24,7 +23,7 @@ import { MessageBubble } from '@/components/selia/MessageBubble'
 import { useChat, type Model } from '@/lib/useChat'
 import { cn } from '@/lib/utils'
 
-function App() {
+export default function ChatApp() {
     const {
         conversations,
         currentChatId,
@@ -34,18 +33,12 @@ function App() {
         setModel,
         isLoading,
         sendMessage,
-        setCurrentChatId
+        setCurrentChatId,
+        isHydrated
     } = useChat()
 
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
     const bottomRef = useRef<HTMLDivElement>(null)
-
-    // Auto-create chat if none exists
-    useEffect(() => {
-        if (conversations.length === 0 && !currentChatId) {
-            createNewChat()
-        }
-    }, [conversations, currentChatId, createNewChat])
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -58,12 +51,12 @@ function App() {
         if (input.value.trim()) {
             sendMessage(input.value)
             input.value = ''
-            // Reset textarea height
             input.style.height = 'auto'
         }
     }
 
     const handleDeleteChat = (id: string) => {
+        console.log('[ChatApp] Delete chat clicked:', id);
         deleteChat(id)
         toastManager.add({
             type: 'success',
@@ -74,12 +67,26 @@ function App() {
     }
 
     const handleCreateNewChat = () => {
+        console.log('[ChatApp] Create new chat clicked');
         createNewChat()
+    }
+
+    // Show loading state during hydration
+    if (!isHydrated) {
+        return (
+            <div className="flex h-screen w-full items-center justify-center bg-zinc-50 dark:bg-zinc-950">
+                <div className="text-center">
+                    <div className="mb-4 inline-block h-8 w-8 animate-spin rounded-full border-4 border-indigo-600 border-t-transparent"></div>
+                    <p className="text-sm text-zinc-500">Loading...</p>
+                </div>
+            </div>
+        )
     }
 
     return (
         <div className="flex h-screen w-full bg-zinc-50 dark:bg-zinc-950 font-sans text-zinc-900 dark:text-zinc-50 overflow-hidden">
             <Toast />
+
             {/* Sidebar - Desktop */}
             <aside className="hidden h-full w-72 flex-col border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 md:flex flex-shrink-0">
                 <SidebarContent
@@ -215,7 +222,7 @@ function App() {
                                                 align="start"
                                                 side="top"
                                                 sideOffset={10}
-                                                className="min-w-[180px] sm:min-w-[220px]" // ← Tambah ini
+                                                className="min-w-[180px] sm:min-w-[220px]"
                                             >
                                                 <SelectList>
                                                     <SelectItem value="gpt-3.5-turbo">
@@ -283,7 +290,6 @@ function App() {
     )
 }
 
-
 function SidebarContent({
     conversations,
     currentChatId,
@@ -349,7 +355,7 @@ function SidebarContent({
                                         </Button>
                                     )}
                                 />
-                                <AlertDialogPopup>
+                                <AlertDialogPopup className="z-99">
                                     <AlertDialogHeader>
                                         <AlertDialogTitle>Delete Conversation?</AlertDialogTitle>
                                         <AlertDialogDescription className="text-zinc-500">
@@ -393,5 +399,3 @@ function SidebarContent({
         </>
     )
 }
-
-export default App
