@@ -1,4 +1,5 @@
-import { Menu, Sparkles } from 'lucide-react';
+import React from 'react';
+import { Menu } from 'lucide-react';
 import { Button } from './ui/button';
 import { ModelSelector } from './ModelSelector';
 import type { AIModel } from '../types/chat';
@@ -9,7 +10,11 @@ interface HeaderProps {
     onMenuToggle: () => void;
 }
 
-export function Header({ selectedModel, onModelChange, onMenuToggle }: HeaderProps) {
+export function Header({
+    selectedModel,
+    onModelChange,
+    onMenuToggle,
+}: HeaderProps) {
     return (
         <header className="glass-strong border-b border-border px-4 py-3 flex items-center justify-between sticky top-0 z-10">
             <div className="flex items-center gap-3">
@@ -25,7 +30,7 @@ export function Header({ selectedModel, onModelChange, onMenuToggle }: HeaderPro
 
                 {/* Logo */}
                 <div className="flex items-center gap-2">
-                    <div className=" flex items-center justify-center">
+                    <div className="flex items-center justify-center">
                         <img src="https://demtimcod.github.io/img/dc-logo.jpg" alt="Logo" className="w-8 h-8 rounded-lg" />
                     </div>
                     <h1 className="text-lg font-bold gradient-text hidden sm:block">
@@ -35,7 +40,10 @@ export function Header({ selectedModel, onModelChange, onMenuToggle }: HeaderPro
             </div>
 
             {/* Model Selector */}
-            <ModelSelector selectedModel={selectedModel} onModelChange={onModelChange} />
+            <ModelSelector
+                selectedModel={selectedModel}
+                onModelChange={onModelChange}
+            />
         </header>
     );
 }

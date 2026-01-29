@@ -1,6 +1,6 @@
 import type { AIModel } from '../types/chat';
 
-const API_URL = 'https://api.chatanywhere.tech/v1/chat/completions';
+const CHAT_API_URL = 'https://api.chatanywhere.tech/v1/chat/completions';
 
 export interface ChatCompletionOptions {
     model: AIModel;
@@ -19,7 +19,7 @@ export async function sendChatMessage({
         // Use provided API key or fall back to environment variable
         const key = apiKey || import.meta.env.VITE_CHAT_API_KEY;
 
-        const response = await fetch(API_URL, {
+        const response = await fetch(CHAT_API_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

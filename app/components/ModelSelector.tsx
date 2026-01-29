@@ -16,7 +16,10 @@ interface ModelSelectorProps {
     onModelChange: (model: AIModel) => void;
 }
 
-export function ModelSelector({ selectedModel, onModelChange }: ModelSelectorProps) {
+export function ModelSelector({
+    selectedModel,
+    onModelChange,
+}: ModelSelectorProps) {
     const models: AIModel[] = ['gpt-3.5-turbo', 'gpt-4o-mini', 'deepseek-v3', 'deepseek-r1'];
 
     return (
