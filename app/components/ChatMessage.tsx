@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import { User, Bot, Copy, Check } from 'lucide-react';
 import { Button } from './ui/button';
 import { cn } from '../lib/utils';
@@ -55,11 +55,12 @@ export function ChatMessage({ message }: ChatMessageProps) {
                                 code({ node, inline, className, children, ...props }: any) {
                                     const match = /language-(\w+)/.exec(className || '');
                                     const codeString = String(children).replace(/\n$/, '');
+                                    const language = match ? match[1] : 'text';
 
                                     return !inline && match ? (
                                         <div className="my-6">
                                             <div className="flex justify-between items-center px-4 py-2 bg-black/40 rounded-t-lg text-xs text-muted-foreground font-medium">
-                                                <span className="lowercase">{match[1]}</span>
+                                                <span className="lowercase">{language}</span>
                                                 <Button
                                                     variant="ghost"
                                                     size="sm"
@@ -85,9 +86,10 @@ export function ChatMessage({ message }: ChatMessageProps) {
                                                 </Button>
                                             </div>
                                             <SyntaxHighlighter
-                                                style={vscDarkPlus}
-                                                language={match[1]}
+                                                style={oneDark}
+                                                language={language}
                                                 PreTag="div"
+                                                showLineNumbers={false}
                                                 customStyle={{
                                                     margin: 0,
                                                     borderTopLeftRadius: 0,

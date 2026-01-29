@@ -91,14 +91,31 @@ export default function Home() {
         setActiveConversationId(newActive?.id || null);
       }
 
+      // Immediately save to localStorage to prevent data coming back on refresh
+      storage.saveConversations(filtered);
+
       return filtered;
     });
   };
 
   const handleSendMessage = async (content: string) => {
-    if (!activeConversationId) {
-      handleNewConversation();
-      return;
+    // Create new conversation if none exists
+    let conversationId = activeConversationId;
+
+    if (!conversationId) {
+      const newConversation: Conversation = {
+        id: Date.now().toString(),
+        title: content.slice(0, 50),
+        messages: [],
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        model: selectedModel,
+      };
+
+      conversationId = newConversation.id;
+      setConversations(prev => [newConversation, ...prev]);
+      setActiveConversationId(conversationId);
+      setIsMobileSidebarOpen(false);
     }
 
     const userMessage: Message = {
@@ -111,7 +128,7 @@ export default function Home() {
     // Add user message
     setConversations(prev =>
       prev.map(conv =>
-        conv.id === activeConversationId
+        conv.id === conversationId
           ? {
             ...conv,
             messages: [...conv.messages, userMessage],
@@ -137,14 +154,14 @@ export default function Home() {
 
       setConversations(prev =>
         prev.map(conv =>
-          conv.id === activeConversationId
+          conv.id === conversationId
             ? { ...conv, messages: [...conv.messages, aiMessage] }
             : conv
         )
       );
 
       // Get conversation messages for context
-      const conversation = conversations.find(c => c.id === activeConversationId);
+      const conversation = conversations.find(c => c.id === conversationId);
       const messages = conversation?.messages || [];
 
       // Send to API with streaming
@@ -157,7 +174,7 @@ export default function Home() {
         onChunk: (chunk) => {
           setConversations(prev =>
             prev.map(conv =>
-              conv.id === activeConversationId
+              conv.id === conversationId
                 ? {
                   ...conv,
                   messages: conv.messages.map(msg =>
@@ -185,7 +202,7 @@ export default function Home() {
 
       setConversations(prev =>
         prev.map(conv =>
-          conv.id === activeConversationId
+          conv.id === conversationId
             ? {
               ...conv,
               messages: [...conv.messages.slice(0, -1), errorMessage],
@@ -212,7 +229,7 @@ export default function Home() {
       />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 min-h-0 h-full">
         {/* Header */}
         <Header
           selectedModel={selectedModel}
@@ -221,7 +238,7 @@ export default function Home() {
         />
 
         {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin">
+        <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden scrollbar-thin">
           {!activeConversation || activeConversation.messages.length === 0 ? (
             <div className="h-full flex items-center justify-center flex-col gap-6 px-8 text-center">
               <div className="flex items-center justify-center">
